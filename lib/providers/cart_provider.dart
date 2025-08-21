@@ -8,12 +8,12 @@ class CartProviders with ChangeNotifier {
   List<Product> get itemList => _itemList;
 
   Future<void> loadItems() async {
-    final storage = await Hive.openBox('myBox');
-    final List<dynamic>? savedItems = storage.get('items');
+    // final storage = await Hive.openBox('myBox');
+    // final List<dynamic>? savedItems = storage.get('items');
 
-    if (savedItems != null) {
-      _itemList.clear();
-    }
+    // if (savedItems != null) {
+    //   _itemList.clear();
+    // }
     notifyListeners();
   }
 

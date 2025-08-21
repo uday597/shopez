@@ -358,11 +358,15 @@ class _CommonGridViewState extends State<CommonGridView> {
     double widthsize = MediaQuery.of(context).size.width;
     int crossAxisCount = 2;
 
-    if (widthsize < 265) {
+    if (widthsize < 391) {
       crossAxisCount = 1;
     } else if (widthsize > 733) {
       crossAxisCount = 3;
     }
+    double itemWidth = (widthsize / crossAxisCount) - 20; // minus padding
+    double itemHeight = 280; // fixed desired height for your card
+    double aspectRatio = itemWidth / itemHeight;
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GridView.builder(
@@ -372,7 +376,7 @@ class _CommonGridViewState extends State<CommonGridView> {
           crossAxisCount: crossAxisCount,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          childAspectRatio: 0.68,
+          childAspectRatio: aspectRatio,
         ),
         itemCount: productinfo.length,
         itemBuilder: (context, index) {
@@ -445,6 +449,7 @@ class _CommonGridViewState extends State<CommonGridView> {
                       ),
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(
@@ -479,7 +484,7 @@ class _CommonGridViewState extends State<CommonGridView> {
                             ],
                           ),
                         ),
-                        SizedBox(width: 30),
+
                         IconButton(
                           onPressed: () {
                             Provider.of<WishlistProvider>(

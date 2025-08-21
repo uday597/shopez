@@ -114,24 +114,29 @@ class _CartitemsState extends State<Cartitems> {
           return Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Total Price : ',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'Total Price : ',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+
+                    Text(
+                      '${value.totalPrice}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: const Color.fromARGB(255, 43, 15, 90),
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  '${value.totalPrice}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: const Color.fromARGB(255, 43, 15, 90),
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                SizedBox(width: 50),
                 SizedBox(
                   width: 100,
                   child: ElevatedButton(
