@@ -65,13 +65,13 @@ class _CartitemsState extends State<Cartitems> {
               child: ListTile(
                 leading: CircleAvatar(
                   radius: 15,
-                  backgroundImage: NetworkImage(item.url),
+                  backgroundImage: NetworkImage(item['url']),
                 ),
                 title: Text(
-                  item.name,
+                  item['name'],
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('₹${item.price}'),
+                subtitle: Text('₹${item['price']}'),
                 trailing: SizedBox(
                   width: 180,
                   child: Consumer<CartProviders>(
@@ -86,7 +86,7 @@ class _CartitemsState extends State<Cartitems> {
                             icon: Icon(Icons.remove),
                           ),
 
-                          Text(item.quantity.toString()),
+                          Text(item['quantity'].toString()),
                           IconButton(
                             onPressed: () {
                               value.incrementQuantity(item);

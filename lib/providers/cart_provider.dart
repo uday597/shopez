@@ -3,9 +3,9 @@ import 'package:hive/hive.dart';
 import 'package:newproject/modal/modal_class.dart';
 
 class CartProviders with ChangeNotifier {
-  final List<Product> _itemList = [];
+  final List<Map<String, dynamic>> _itemList = [];
 
-  List<Product> get itemList => _itemList;
+  List<Map<String, dynamic>> get itemList => _itemList;
 
   Future<void> loadItems() async {
     // final storage = await Hive.openBox('myBox');
@@ -17,7 +17,7 @@ class CartProviders with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeItem(Product product) {
+  void removeItem(Map<String, dynamic> product) {
     _itemList.remove(product);
     notifyListeners();
   }
@@ -27,15 +27,17 @@ class CartProviders with ChangeNotifier {
     notifyListeners();
   }
 
-  void addItem(Product product) async {
+  void addItem(Map<String, dynamic> product) async {
     final storage = await Hive.openBox('myBox');
 
-    final index = _itemList.indexWhere((item) => item.name == product.name);
+    final index = _itemList.indexWhere(
+      (item) => item['name'] == product['name'],
+    );
 
     if (index != -1) {
-      _itemList[index].quantity++;
+      _itemList[index]['quantity']++;
     } else {
-      product.quantity = 1;
+      product['quantity'] = 1;
       _itemList.add(product);
     }
     storage.put('items', _itemList);
@@ -43,20 +45,24 @@ class CartProviders with ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementQuantity(Product producsts) {
-    final index = _itemList.indexWhere((item) => item.name == producsts.name);
-    _itemList[index].quantity++;
+  void incrementQuantity(Map<String, dynamic> producsts) {
+    final index = _itemList.indexWhere(
+      (item) => item['name'] == producsts['name'],
+    );
+    _itemList[index]['quantity']++;
     notifyListeners();
   }
 
-  void decrementQuantity(Product products) {
-    final index = _itemList.indexWhere((item) => item.name == products.name);
+  void decrementQuantity(Map<String, dynamic> products) {
+    final index = _itemList.indexWhere(
+      (item) => item['name'] == products['name'],
+    );
 
     if (index != -1) {
-      int currentQuantity = _itemList[index].quantity;
+      int currentQuantity = _itemList[index]['quantity'];
 
       if (currentQuantity > 1) {
-        _itemList[index].quantity = currentQuantity - 1;
+        _itemList[index]['quantity'] = currentQuantity - 1;
       } else {
         _itemList.removeAt(index);
       }
@@ -67,8 +73,8 @@ class CartProviders with ChangeNotifier {
   double get totalPrice {
     double total = 0.0;
     for (var item in _itemList) {
-      double price = item.price;
-      int quantity = item.quantity;
+      double price = item['price'];
+      int quantity = item['quantity'];
       total += price * quantity;
     }
     return double.parse(total.toStringAsFixed(2));

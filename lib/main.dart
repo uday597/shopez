@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newproject/project/homescreen.dart';
 import 'package:newproject/project/login_page.dart';
+import 'package:newproject/providers/supabase.dart';
 import 'package:newproject/providers/wishlist_provider.dart';
 import 'package:newproject/providers/cart_provider.dart';
 
@@ -24,6 +25,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => SupaProvider()..fatchdata()),
         ChangeNotifierProvider(create: (_) => CartProviders()),
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
       ],

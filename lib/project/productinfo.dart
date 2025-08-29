@@ -7,9 +7,9 @@ import 'package:newproject/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class Itemsinfo extends StatefulWidget {
-  final Product productsinfo;
+  final Map<String, dynamic> list;
 
-  const Itemsinfo({super.key, required this.productsinfo});
+  const Itemsinfo({super.key, required this.list});
 
   @override
   State<Itemsinfo> createState() => _ItemsinfoState();
@@ -20,7 +20,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
   Widget build(BuildContext context) {
     void savedata() {
       final database = Hive.box('myBox');
-      database.put('items', widget.productsinfo);
+      database.put('items', widget.list);
     }
 
     return Scaffold(
@@ -48,7 +48,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
             Column(
               children: [
                 SizedBox(height: 20),
-                Image.network(widget.productsinfo.url, height: 250),
+                Image.network(widget.list['url'], height: 250),
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -56,7 +56,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.productsinfo.name,
+                        widget.list['name'],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -88,9 +88,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
 
                             children: [
                               TextSpan(
-                                text: widget.productsinfo.price.toStringAsFixed(
-                                  0,
-                                ),
+                                text: widget.list['price'].toStringAsFixed(0),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: const Color.fromARGB(192, 0, 0, 0),
@@ -107,7 +105,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                         color: const Color.fromARGB(255, 177, 17, 6),
                         child: Center(
                           child: Text(
-                            widget.productsinfo.discount,
+                            widget.list['discount'],
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -139,7 +137,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        widget.productsinfo.description,
+                        widget.list['description'],
                         style: const TextStyle(
                           color: Color.fromARGB(150, 0, 0, 0),
                           fontWeight: FontWeight.bold,
@@ -196,7 +194,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
             Provider.of<CartProviders>(
               context,
               listen: false,
-            ).addItem(widget.productsinfo);
+            ).addItem(widget.list);
           },
           style: ElevatedButton.styleFrom(
             minimumSize: Size(380, 50),

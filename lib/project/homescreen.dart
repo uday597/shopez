@@ -9,14 +9,15 @@ import 'package:newproject/project/contact_us.dart';
 import 'package:newproject/project/productinfo.dart';
 import 'package:newproject/project/terms_conditions.dart';
 import 'package:newproject/project/wishlist.dart';
+import 'package:newproject/providers/supabase.dart';
 import 'package:newproject/providers/wishlist_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../modal/modal_class.dart' show ProductClass, Product;
 
-final ProductClass modal = ProductClass();
-final productinfo = modal.productlist;
+// final ProductClass modal = ProductClass();
+// final productinfo = modal.productlist;
 
 class Productlist extends StatefulWidget {
   const Productlist({super.key});
@@ -36,38 +37,36 @@ class _ProductlistState extends State<Productlist> {
     });
   }
 
-  void filterlist(String type) {
-    setState(() {
-      if (type == 'all') {
-        productlist = productinfo.toList();
-      } else {
-        productlist = productinfo
-            .where(
-              (item) => item.category.toString().toLowerCase().contains(
-                type.toLowerCase(),
-              ),
-            )
-            .toList();
-      }
-    });
-  }
+  // void filterlist(String type) {
+  //   setState(() {
+  //     if (type == 'all') {
+  //       productlist = productinfo.toList();
+  //     } else {
+  //       productlist = productinfo
+  //           .where(
+  //             (item) => item.category.toString().toLowerCase().contains(
+  //               type.toLowerCase(),
+  //             ),
+  //           )
+  //           .toList();
+  //     }
+  //   });
+  // }
 
   @override
-  void initState() {
-    super.initState();
-    productlist = productinfo;
-  }
-
-  void searchfilter(String quary) {
-    final searchitem = productinfo.where((item) {
-      final name = item.name.toString().toLowerCase();
-      return name.contains(quary.toLowerCase());
-    }).toList();
-    setState(() {
-      productlist = searchitem;
-    });
-  }
-
+  // void initState() {
+  //   super.initState();
+  //   productlist = productinfo;
+  // }
+  // void searchfilter(String quary) {
+  //   final searchitem = productinfo.where((item) {
+  //     final name = item.name.toString().toLowerCase();
+  //     return name.contains(quary.toLowerCase());
+  //   }).toList();
+  //   setState(() {
+  //     productlist = searchitem;
+  //   });
+  // }
   Future<void> _signout(BuildContext context) async {
     await Supabase.instance.client.auth.signOut();
     context.go('/');
@@ -75,8 +74,25 @@ class _ProductlistState extends State<Productlist> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<SupaProvider>(context);
     final user = Supabase.instance.client.auth.currentUser;
 
+    // void saveitem() {
+    //   final database = Hive.box('myBox');
+    //   database.put('wishlist', productinfo);
+    // }
+
+    double widthsize = MediaQuery.of(context).size.width;
+    int crossAxisCount = 2;
+
+    if (widthsize < 391) {
+      crossAxisCount = 1;
+    } else if (widthsize > 733) {
+      crossAxisCount = 3;
+    }
+    double itemWidth = (widthsize / crossAxisCount) - 20; // minus padding
+    double itemHeight = 260; // fixed desired height for your card
+    double aspectRatio = itemWidth / itemHeight;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 60),
@@ -239,7 +255,7 @@ class _ProductlistState extends State<Productlist> {
                         ],
                       ),
                       child: TextField(
-                        onChanged: searchfilter,
+                        // onChanged: searchfilter,
                         controller: searchcontroller,
                         decoration: InputDecoration(
                           hintText: 'Search...',
@@ -289,7 +305,7 @@ class _ProductlistState extends State<Productlist> {
                           if (value != null) {
                             setState(() {
                               selectedFilter = value;
-                              filterlist(value);
+                              // filterlist(value);
                             });
                           }
                         },
@@ -330,7 +346,165 @@ class _ProductlistState extends State<Productlist> {
               ],
             ),
 
-            CommonGridView(productinfo: productlist),
+            // CommonGridView(productinfo: productlist),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: provider.isloading
+                  ? const Center(child: CircularProgressIndicator())
+                  : GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: aspectRatio,
+                      ),
+                      itemCount: provider.list.length,
+                      itemBuilder: (context, index) {
+                        final box = provider.list[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 2,
+                            vertical: 1,
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Itemsinfo(list: box),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color.fromARGB(255, 197, 195, 195),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Product Image
+                                  Container(
+                                    height: 130,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(box['url']),
+                                        fit: BoxFit.contain,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 8,
+                                      top: 10,
+                                      bottom: 4,
+                                    ),
+                                    child: Text(
+                                      box['name'],
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Text(
+                                      box['buyers'],
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: const Color.fromARGB(
+                                          178,
+                                          0,
+                                          0,
+                                          0,
+                                        ),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 10,
+                                          right: 5,
+                                          top: 10,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              height: 20,
+                                              width: 60,
+                                              color: const Color.fromARGB(
+                                                255,
+                                                177,
+                                                17,
+                                                6,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  box['discount'],
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 3),
+                                            Text(
+                                              '₹${(box['price'] as num).toStringAsFixed(0)}',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.favorite_border_outlined,
+                                          color: Colors.blueGrey,
+                                          size: 25,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  // Price and Discount
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
           ],
         ),
       ),
@@ -338,184 +512,184 @@ class _ProductlistState extends State<Productlist> {
   }
 }
 
-class CommonGridView extends StatefulWidget {
-  final List<Product> productinfo;
+// class CommonGridView extends StatefulWidget {
+//   final List<Product> productinfo;
 
-  const CommonGridView({super.key, required this.productinfo});
+//   const CommonGridView({super.key, required this.productinfo});
 
-  @override
-  State<CommonGridView> createState() => _CommonGridViewState();
-}
+//   @override
+//   State<CommonGridView> createState() => _CommonGridViewState();
+// }
 
-class _CommonGridViewState extends State<CommonGridView> {
-  @override
-  Widget build(BuildContext context) {
-    void saveitem() {
-      final database = Hive.box('myBox');
-      database.put('wishlist', productinfo);
-    }
+// class _CommonGridViewState extends State<CommonGridView> {
+//   @override
+//   Widget build(BuildContext context) {
+//     void saveitem() {
+//       final database = Hive.box('myBox');
+//       database.put('wishlist', productinfo);
+//     }
 
-    double widthsize = MediaQuery.of(context).size.width;
-    int crossAxisCount = 2;
+//     double widthsize = MediaQuery.of(context).size.width;
+//     int crossAxisCount = 2;
 
-    if (widthsize < 391) {
-      crossAxisCount = 1;
-    } else if (widthsize > 733) {
-      crossAxisCount = 3;
-    }
-    double itemWidth = (widthsize / crossAxisCount) - 20; // minus padding
-    double itemHeight = 260; // fixed desired height for your card
-    double aspectRatio = itemWidth / itemHeight;
+//     if (widthsize < 391) {
+//       crossAxisCount = 1;
+//     } else if (widthsize > 733) {
+//       crossAxisCount = 3;
+//     }
+//     double itemWidth = (widthsize / crossAxisCount) - 20; // minus padding
+//     double itemHeight = 260; // fixed desired height for your card
+//     double aspectRatio = itemWidth / itemHeight;
 
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: aspectRatio,
-        ),
-        itemCount: productinfo.length,
-        itemBuilder: (context, index) {
-          final box = productinfo[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Itemsinfo(productsinfo: box),
-                  ),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 197, 195, 195),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Product Image
-                    Container(
-                      height: 130,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(box.url),
-                          fit: BoxFit.contain,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                      ),
-                    ),
+//     return Padding(
+//       padding: const EdgeInsets.all(10),
+//       child: GridView.builder(
+//         physics: const NeverScrollableScrollPhysics(),
+//         shrinkWrap: true,
+//         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//           crossAxisCount: crossAxisCount,
+//           crossAxisSpacing: 10,
+//           mainAxisSpacing: 10,
+//           childAspectRatio: aspectRatio,
+//         ),
+//         itemCount: productinfo.length,
+//         itemBuilder: (context, index) {
+//           final box = productinfo[index];
+//           return Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+//             child: GestureDetector(
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => Itemsinfo(productsinfo: box),
+//                   ),
+//                 );
+//               },
+//               child: Container(
+//                 padding: const EdgeInsets.all(8),
+//                 decoration: BoxDecoration(
+//                   color: Colors.white,
+//                   borderRadius: BorderRadius.circular(10),
+//                   boxShadow: const [
+//                     BoxShadow(
+//                       color: Color.fromARGB(255, 197, 195, 195),
+//                       spreadRadius: 1,
+//                       blurRadius: 5,
+//                     ),
+//                   ],
+//                 ),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     // Product Image
+//                     Container(
+//                       height: 130,
+//                       width: double.infinity,
+//                       decoration: BoxDecoration(
+//                         image: DecorationImage(
+//                           image: NetworkImage(box.url),
+//                           fit: BoxFit.contain,
+//                         ),
+//                         borderRadius: const BorderRadius.only(
+//                           topLeft: Radius.circular(10),
+//                           topRight: Radius.circular(10),
+//                         ),
+//                       ),
+//                     ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8,
-                        top: 10,
-                        bottom: 4,
-                      ),
-                      child: Text(
-                        box.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Text(
-                        box.buyers,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: const Color.fromARGB(178, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 10,
-                            right: 5,
-                            top: 10,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                height: 20,
-                                width: 60,
-                                color: const Color.fromARGB(255, 177, 17, 6),
-                                child: Center(
-                                  child: Text(
-                                    box.discount,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 3),
-                              Text(
-                                '₹${box.price.toStringAsFixed(0)}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+//                     Padding(
+//                       padding: const EdgeInsets.only(
+//                         left: 8,
+//                         top: 10,
+//                         bottom: 4,
+//                       ),
+//                       child: Text(
+//                         box.name,
+//                         maxLines: 2,
+//                         overflow: TextOverflow.ellipsis,
+//                         style: const TextStyle(fontWeight: FontWeight.bold),
+//                       ),
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.only(left: 8),
+//                       child: Text(
+//                         box.buyers,
+//                         style: TextStyle(
+//                           fontSize: 14,
+//                           color: const Color.fromARGB(178, 0, 0, 0),
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                     ),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Padding(
+//                           padding: const EdgeInsets.only(
+//                             left: 10,
+//                             right: 5,
+//                             top: 10,
+//                           ),
+//                           child: Column(
+//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                             children: [
+//                               Container(
+//                                 height: 20,
+//                                 width: 60,
+//                                 color: const Color.fromARGB(255, 177, 17, 6),
+//                                 child: Center(
+//                                   child: Text(
+//                                     box.discount,
+//                                     style: const TextStyle(
+//                                       color: Colors.white,
+//                                       fontSize: 12,
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ),
+//                               SizedBox(height: 3),
+//                               Text(
+//                                 '₹${box.price.toStringAsFixed(0)}',
+//                                 style: const TextStyle(
+//                                   fontWeight: FontWeight.bold,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ),
 
-                        IconButton(
-                          onPressed: () {
-                            Provider.of<WishlistProvider>(
-                              context,
-                              listen: false,
-                            ).addproduct(box);
-                            saveitem();
-                            setState(() {
-                              box.isFavourite = !box.isFavourite;
-                            });
-                          },
-                          icon: box.isFavourite
-                              ? Icon(Icons.favorite, color: Colors.red)
-                              : Icon(
-                                  Icons.favorite_border_outlined,
-                                  color: Colors.blueGrey,
-                                  size: 25,
-                                ),
-                        ),
-                      ],
-                    ),
+//                         IconButton(
+//                           onPressed: () {
+//                             Provider.of<WishlistProvider>(
+//                               context,
+//                               listen: false,
+//                             ).addproduct(box);
+//                             saveitem();
+//                             setState(() {
+//                               box.isFavourite = !box.isFavourite;
+//                             });
+//                           },
+//                           icon: box.isFavourite
+//                               ? Icon(Icons.favorite, color: Colors.red)
+//                               : Icon(
+//                                   Icons.favorite_border_outlined,
+//                                   color: Colors.blueGrey,
+//                                   size: 25,
+//                                 ),
+//                         ),
+//                       ],
+//                     ),
 
-                    // Price and Discount
-                    const SizedBox(height: 10),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+//                     // Price and Discount
+//                     const SizedBox(height: 10),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
