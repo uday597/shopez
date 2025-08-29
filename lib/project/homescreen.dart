@@ -364,7 +364,7 @@ class _CommonGridViewState extends State<CommonGridView> {
       crossAxisCount = 3;
     }
     double itemWidth = (widthsize / crossAxisCount) - 20; // minus padding
-    double itemHeight = 280; // fixed desired height for your card
+    double itemHeight = 260; // fixed desired height for your card
     double aspectRatio = itemWidth / itemHeight;
 
     return Padding(

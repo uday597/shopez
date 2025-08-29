@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/project/paymentscreen.dart';
+import 'package:newproject/project/account_page.dart';
 import 'package:newproject/providers/cart_provider.dart';
 
 import 'package:provider/provider.dart';
@@ -143,7 +143,7 @@ class _CartitemsState extends State<Cartitems> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Buyscreen()),
+                        MaterialPageRoute(builder: (context) => AccountPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
