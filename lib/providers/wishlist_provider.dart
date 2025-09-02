@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
-
-import 'package:newproject/modal/modal_class.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class WishlistProvider extends ChangeNotifier {
-  final List<Product> _wishlist = [];
-  List<Product> get wishlist => _wishlist;
+  List<Map<String, dynamic>> _wishlist = [];
+  List<Map<String, dynamic>> get wishlist => _wishlist;
+  bool _isloading = true;
+  bool get isloading => _isloading;
 
-  void removeproduct(Product product) {
+  Future<void> fatchdata() async {
+    final supabase = Supabase.instance.client;
+    final response = await supabase.from('product').select();
+    _isloading = false;
+    _wishlist = response;
+    notifyListeners();
+  }
+
+  void removeproduct(Map<String, dynamic> product) {
     _wishlist.remove(product);
     notifyListeners();
   }
 
-  void addproduct(Product product) {
-    if (!_wishlist.contains(product)) {
-      _wishlist.add(product);
-      notifyListeners();
-    }
+  void addproduct(Map<String, dynamic> product) {
+    _wishlist.add(product);
+    notifyListeners();
   }
 }

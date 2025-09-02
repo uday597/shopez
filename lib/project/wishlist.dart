@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/providers/wishlist_provider.dart';
+import 'package:shopease/providers/wishlist_provider.dart';
 import 'package:provider/provider.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -12,7 +12,7 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
-    final fav = Provider.of<WishlistProvider>(context).wishlist;
+    final fav = Provider.of<WishlistProvider>(context, listen: false).wishlist;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 60),
@@ -48,11 +48,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 return Card(
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(item.url),
+                      backgroundImage: NetworkImage(item['url']),
                     ),
-                    subtitle: Text(item.price.toString()),
+                    subtitle: Text(item['price'].toString()),
 
-                    title: Text(item.name),
+                    title: Text(item['name']),
                     trailing: IconButton(
                       onPressed: () {
                         Provider.of<WishlistProvider>(

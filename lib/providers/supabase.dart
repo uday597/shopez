@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/project/account_page.dart';
+import 'package:shopease/project/account_page.dart';
 
 class SupaProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _list = [];

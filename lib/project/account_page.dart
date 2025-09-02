@@ -15,13 +15,13 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  XFile? _image;
-  final _picker = ImagePicker();
-  pickImage() async {
-    final PickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (PickedFile != null) {
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+  Future<void> _imagepickfun() async {
+    final pickedfile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedfile != null) {
       setState(() {
-        _image = PickedFile;
+        _image = File(pickedfile.path);
       });
     }
   }
@@ -56,6 +56,7 @@ class _AccountPageState extends State<AccountPage> {
     if (isLoading) {
       return Center(child: const CircularProgressIndicator());
     }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.yellowAccent,
@@ -84,18 +85,18 @@ class _AccountPageState extends State<AccountPage> {
               },
             ),
           ),
-          // FloatingActionButton(
-          //   onPressed: () {
-          //     pickImage();
-          //   },
-          //   child: Icon(Icons.camera_alt),
-          // ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     operations();
-          //   },
-          //   child: Text('Perform operation'),
-          // ),
+          FloatingActionButton(
+            onPressed: () {
+              _imagepickfun();
+            },
+            child: Icon(Icons.camera_alt),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              operations();
+            },
+            child: Text('Perform operation'),
+          ),
         ],
       ),
     );

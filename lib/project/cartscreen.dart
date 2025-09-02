@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/project/account_page.dart';
-import 'package:newproject/providers/cart_provider.dart';
+import 'package:shopease/project/account_page.dart';
+import 'package:shopease/providers/cart_provider.dart';
 
 import 'package:provider/provider.dart';
 

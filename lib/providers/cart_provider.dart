@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:newproject/modal/modal_class.dart';
 
 class CartProviders with ChangeNotifier {
   final List<Map<String, dynamic>> _itemList = [];
@@ -14,6 +13,7 @@ class CartProviders with ChangeNotifier {
     // if (savedItems != null) {
     //   _itemList.clear();
     // }
+
     notifyListeners();
   }
 
