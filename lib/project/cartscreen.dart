@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopease/project/account_page.dart';
 import 'package:shopease/providers/cart_provider.dart';
 
 import 'package:provider/provider.dart';
@@ -62,16 +61,17 @@ class _CartitemsState extends State<Cartitems> {
           return Padding(
             padding: const EdgeInsets.only(right: 10, left: 10, top: 3),
             child: Card(
+              key: ValueKey(item.id),
               child: ListTile(
                 leading: CircleAvatar(
                   radius: 15,
-                  backgroundImage: NetworkImage(item['url']),
+                  backgroundImage: NetworkImage(item.url),
                 ),
                 title: Text(
-                  item['name'],
+                  item.name,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('₹${item['price']}'),
+                subtitle: Text('₹${item.price}'),
                 trailing: SizedBox(
                   width: 180,
                   child: Consumer<CartProviders>(
@@ -86,7 +86,7 @@ class _CartitemsState extends State<Cartitems> {
                             icon: Icon(Icons.remove),
                           ),
 
-                          Text(item['quantity'].toString()),
+                          Text(item.quantity.toString()),
                           IconButton(
                             onPressed: () {
                               value.incrementQuantity(item);
@@ -128,7 +128,7 @@ class _CartitemsState extends State<Cartitems> {
                     ),
 
                     Text(
-                      '${value.totalPrice}',
+                      ' ${value.totalPrice}',
                       style: TextStyle(
                         fontSize: 20,
                         color: const Color.fromARGB(255, 43, 15, 90),
@@ -141,10 +141,10 @@ class _CartitemsState extends State<Cartitems> {
                   width: 100,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AccountPage()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => AccountPage()),
+                      // );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 228, 73, 26),

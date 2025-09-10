@@ -5,11 +5,13 @@ import 'package:shopease/project/cartscreen.dart';
 import 'package:shopease/project/contact_us.dart';
 import 'package:shopease/project/productinfo.dart';
 import 'package:shopease/project/terms_conditions.dart';
-import 'package:shopease/project/wishlist.dart';
+import 'package:shopease/project/Wishlist.dart';
 import 'package:shopease/providers/Wishlist_provider.dart';
 import 'package:shopease/providers/supabase.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../modal/modal_class.dart';
 
 class Productlist extends StatefulWidget {
   const Productlist({super.key});
@@ -18,28 +20,27 @@ class Productlist extends StatefulWidget {
 }
 
 class _ProductlistState extends State<Productlist> {
-  List<Map<String, dynamic>> productlist = [];
+  List<Product> productlist = [];
 
   TextEditingController searchcontroller = TextEditingController();
   String selectedFilter = 'all';
-  bool isSelected = false;
+  bool isFavourite = false;
 
   void _applyFilters(String query, String filter) {
     final provider = Provider.of<SupaProvider>(context, listen: false);
 
-    List<Map<String, dynamic>> results = provider.list;
+    List<Product> results = provider.list.cast<Product>();
 
     if (filter != 'all') {
       results = results.where((item) {
-        final category = item['category']?.toString().toLowerCase() ?? '';
+        final category = item.category.toLowerCase();
         return category.contains(filter.toLowerCase());
       }).toList();
     }
 
-    // Apply search query
     if (query.isNotEmpty) {
       results = results.where((item) {
-        final name = item['name']?.toString().toLowerCase() ?? '';
+        final name = item.name.toLowerCase();
         return name.contains(query.toLowerCase());
       }).toList();
     }
@@ -58,9 +59,12 @@ class _ProductlistState extends State<Productlist> {
 
   @override
   Widget build(BuildContext context) {
+    final wishprovider = Provider.of<WishlistProvider>(context);
     final provider = Provider.of<SupaProvider>(context);
     final user = Supabase.instance.client.auth.currentUser;
-
+    if (productlist.isEmpty && provider.list.isNotEmpty) {
+      productlist = provider.list;
+    }
     double widthsize = MediaQuery.of(context).size.width;
     int crossAxisCount = 2;
 
@@ -69,8 +73,9 @@ class _ProductlistState extends State<Productlist> {
     } else if (widthsize > 733) {
       crossAxisCount = 3;
     }
-    double itemWidth = (widthsize / crossAxisCount) - 20; // minus padding
-    double itemHeight = 260; // fixed desired height for your card
+    double itemWidth = (widthsize / crossAxisCount) - 20;
+
+    double itemHeight = 260;
     double aspectRatio = itemWidth / itemHeight;
     return Scaffold(
       appBar: PreferredSize(
@@ -190,17 +195,20 @@ class _ProductlistState extends State<Productlist> {
                 );
               },
             ),
-
-            ElevatedButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                await _signout(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 240, 41, 117),
-                minimumSize: Size(100, 34),
+            SizedBox(height: 50),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await _signout(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 240, 41, 117),
+                  minimumSize: Size(double.infinity, 34),
+                ),
+                child: Text('Logout', style: TextStyle(color: Colors.white)),
               ),
-              child: Text('Logout', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -232,6 +240,9 @@ class _ProductlistState extends State<Productlist> {
                       child: TextField(
                         // onChanged: searchfilter,
                         controller: searchcontroller,
+                        onChanged: (value) {
+                          _applyFilters(value, selectedFilter);
+                        },
                         decoration: InputDecoration(
                           hintText: 'Search...',
                           border: InputBorder.none,
@@ -280,7 +291,6 @@ class _ProductlistState extends State<Productlist> {
                           if (value != null) {
                             setState(() {
                               selectedFilter = value;
-                              // filterlist(value);
                             });
                             _applyFilters(searchcontroller.text, value);
                           }
@@ -322,7 +332,6 @@ class _ProductlistState extends State<Productlist> {
               ],
             ),
 
-            // CommonGridView(productinfo: productlist),
             Padding(
               padding: const EdgeInsets.all(10),
               child: provider.isloading
@@ -336,9 +345,9 @@ class _ProductlistState extends State<Productlist> {
                         mainAxisSpacing: 10,
                         childAspectRatio: aspectRatio,
                       ),
-                      itemCount: provider.list.length,
+                      itemCount: productlist.length,
                       itemBuilder: (context, index) {
-                        final box = provider.list[index];
+                        final box = productlist[index];
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 2,
@@ -375,7 +384,7 @@ class _ProductlistState extends State<Productlist> {
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: NetworkImage(box['url']),
+                                        image: NetworkImage(box.url),
                                         fit: BoxFit.contain,
                                       ),
                                       borderRadius: const BorderRadius.only(
@@ -392,7 +401,7 @@ class _ProductlistState extends State<Productlist> {
                                       bottom: 4,
                                     ),
                                     child: Text(
-                                      box['name'],
+                                      box.name,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -403,7 +412,7 @@ class _ProductlistState extends State<Productlist> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8),
                                     child: Text(
-                                      box['buyers'],
+                                      box.buyers,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: const Color.fromARGB(
@@ -441,7 +450,7 @@ class _ProductlistState extends State<Productlist> {
                                               ),
                                               child: Center(
                                                 child: Text(
-                                                  box['discount'],
+                                                  box.discount,
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 12,
@@ -451,7 +460,7 @@ class _ProductlistState extends State<Productlist> {
                                             ),
                                             SizedBox(height: 3),
                                             Text(
-                                              '₹${(box['price'] as num).toStringAsFixed(0)}',
+                                              '₹${box.price}',
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -462,21 +471,31 @@ class _ProductlistState extends State<Productlist> {
 
                                       IconButton(
                                         onPressed: () {
-                                          Provider.of<WishlistProvider>(
-                                            context,
-                                            listen: false,
-                                          ).addproduct(box);
+                                          if (wishprovider.isInWishlist(
+                                            box.id,
+                                          )) {
+                                            wishprovider.removeitem(
+                                              box.toMap(),
+                                            );
+                                          } else {
+                                            wishprovider.additem(box.toMap());
+                                          }
                                         },
                                         icon: Icon(
-                                          Icons.favorite_border_outlined,
-                                          color: Colors.blueGrey,
-                                          size: 25,
+                                          wishprovider.isInWishlist(box.id)
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color:
+                                              wishprovider.isInWishlist(
+                                                box.id.toString(),
+                                              )
+                                              ? Colors.red
+                                              : Colors.grey,
                                         ),
                                       ),
                                     ],
                                   ),
 
-                                  // Price and Discount
                                   const SizedBox(height: 10),
                                 ],
                               ),
@@ -492,3 +511,11 @@ class _ProductlistState extends State<Productlist> {
     );
   }
 }
+
+// class Product {
+//   final String name;
+//   final String description;
+//   double price = 9;
+
+//   Product(this.price, {required this.name, required this.description});
+// }

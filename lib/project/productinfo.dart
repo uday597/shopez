@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:shopease/modal/modal_class.dart';
 
 import 'package:shopease/providers/cart_provider.dart';
 
 import 'package:provider/provider.dart';
 
 class Itemsinfo extends StatefulWidget {
-  final Map<String, dynamic> list;
+  final Product list;
 
   const Itemsinfo({super.key, required this.list});
 
@@ -17,10 +18,10 @@ class Itemsinfo extends StatefulWidget {
 class _ItemsinfoState extends State<Itemsinfo> {
   @override
   Widget build(BuildContext context) {
-    void savedata() {
-      final database = Hive.box('myBox');
-      database.put('items', widget.list);
-    }
+    // void savedata() {
+    //   final database = Hive.box('myBox');
+    //   database.put('items', widget.list);
+    // }
 
     return Scaffold(
       appBar: PreferredSize(
@@ -47,7 +48,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
             Column(
               children: [
                 SizedBox(height: 20),
-                Image.network(widget.list['url'], height: 250),
+                Image.network(widget.list.url, height: 250),
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -55,7 +56,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.list['name'],
+                        widget.list.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -87,7 +88,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
 
                             children: [
                               TextSpan(
-                                text: widget.list['price'].toStringAsFixed(0),
+                                text: widget.list.price.toString(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: const Color.fromARGB(192, 0, 0, 0),
@@ -104,7 +105,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                         color: const Color.fromARGB(255, 177, 17, 6),
                         child: Center(
                           child: Text(
-                            widget.list['discount'],
+                            widget.list.discount,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -136,7 +137,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        widget.list['description'],
+                        widget.list.description,
                         style: const TextStyle(
                           color: Color.fromARGB(150, 0, 0, 0),
                           fontWeight: FontWeight.bold,
@@ -189,7 +190,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                 );
               },
             );
-            savedata();
+            // savedata();
             Provider.of<CartProviders>(
               context,
               listen: false,

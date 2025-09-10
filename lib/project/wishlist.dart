@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopease/providers/wishlist_provider.dart';
+import 'package:shopease/providers/Wishlist_provider.dart';
 import 'package:provider/provider.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -11,8 +11,15 @@ class WishlistScreen extends StatefulWidget {
 
 class _WishlistScreenState extends State<WishlistScreen> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<WishlistProvider>(context, listen: false).loadItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final fav = Provider.of<WishlistProvider>(context, listen: false).wishlist;
+    final fav = Provider.of<WishlistProvider>(context).wishlist;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 60),
@@ -38,36 +45,41 @@ class _WishlistScreenState extends State<WishlistScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               itemCount: fav.length,
               itemBuilder: (context, index) {
                 final item = fav[index];
-                return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(item['url']),
-                    ),
-                    subtitle: Text(item['price'].toString()),
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(item['url']),
+                      ),
+                      subtitle: Text(item['price'].toString()),
 
-                    title: Text(item['name']),
-                    trailing: IconButton(
-                      onPressed: () {
-                        Provider.of<WishlistProvider>(
-                          context,
-                          listen: false,
-                        ).removeproduct(item);
-                      },
-                      icon: Icon(Icons.delete),
+                      title: Text(item['name']),
+                      trailing: IconButton(
+                        onPressed: () {
+                          Provider.of<WishlistProvider>(
+                            context,
+                            listen: false,
+                          ).removeitem(item);
+                        },
+                        icon: Icon(Icons.delete),
+                      ),
                     ),
                   ),
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

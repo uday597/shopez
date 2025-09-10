@@ -4,9 +4,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shopease/project/homescreen.dart';
 import 'package:shopease/project/login_page.dart';
 import 'package:shopease/providers/supabase.dart';
-import 'package:shopease/providers/wishlist_provider.dart';
 import 'package:shopease/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shopease/providers/Wishlist_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 const supabaseUrl = 'https://eyctbxaonlsrptdedpnr.supabase.co';
@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
