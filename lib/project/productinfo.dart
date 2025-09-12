@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:shopease/modal/modal_class.dart';
 
 import 'package:shopease/providers/cart_provider.dart';

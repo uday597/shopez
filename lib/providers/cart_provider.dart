@@ -53,7 +53,7 @@ class CartProviders with ChangeNotifier {
   Future<void> addItem(Product product) async {
     final user = supabase.auth.currentUser;
     if (user == null) return;
-    final index = _itemList.indexWhere((item) => item.name == product.name);
+    final index = _itemList.indexWhere((item) => item.id == product.id);
 
     if (index != -1) {
       _itemList[index].quantity++;
@@ -90,15 +90,23 @@ class CartProviders with ChangeNotifier {
   Future<void> decrementQuantity(Product products) async {
     final user = supabase.auth.currentUser;
     if (user == null) return;
-    final index = _itemList.indexWhere((item) => item.name == products.name);
+    final index = _itemList.indexWhere((item) => item.id == products.id);
 
     if (index != -1) {
       int currentQuantity = _itemList[index].quantity;
 
       if (currentQuantity > 1) {
         _itemList[index].quantity = currentQuantity - 1;
+        await supabase
+            .from('cart')
+            .update({'quantity': _itemList[index].quantity})
+            .match({'user_id': user.id, 'product_id': products.id});
       } else {
         _itemList.removeAt(index);
+        await supabase
+            .from('cart')
+            .update({'quantity': _itemList[index].quantity})
+            .match({'user_id': user.id, 'product_id': products.id});
       }
     }
     await supabase
