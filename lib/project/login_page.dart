@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shopease/project/google_login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'signup.dart';
 
@@ -245,9 +246,20 @@ class _LoginPageState extends State<LoginPage> {
                         "https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yD/r/5D8s-GsHJlJ.png",
                       ),
                       const SizedBox(width: 20),
-                      _socialIcon(
-                        "https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png",
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GoogleLogin(),
+                            ),
+                          );
+                        },
+                        child: _socialIcon(
+                          "https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png",
+                        ),
                       ),
+
                       const SizedBox(width: 20),
                       _socialIcon(
                         "https://storage.needpix.com/rsynced_images/twitter-2672572_1280.jpg",

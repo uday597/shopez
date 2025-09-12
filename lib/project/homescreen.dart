@@ -6,6 +6,7 @@ import 'package:shopease/project/contact_us.dart';
 import 'package:shopease/project/productinfo.dart';
 import 'package:shopease/project/terms_conditions.dart';
 import 'package:shopease/project/Wishlist.dart';
+import 'package:shopease/project/user_info.dart';
 import 'package:shopease/providers/Wishlist_provider.dart';
 import 'package:shopease/providers/supabase.dart';
 import 'package:provider/provider.dart';
@@ -104,6 +105,25 @@ class _ProductlistState extends State<Productlist> {
             ),
 
             actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WishlistScreen()),
+                  );
+                },
+                icon: Icon(Icons.favorite_border_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserInfo()),
+                  );
+                },
+                icon: Icon(Icons.person_2_outlined),
+              ),
+
               Builder(
                 builder: (context) => IconButton(
                   onPressed: () {
@@ -252,6 +272,7 @@ class _ProductlistState extends State<Productlist> {
                     ),
                   ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
