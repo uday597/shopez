@@ -106,13 +106,13 @@ class _UserInfoState extends State<UserInfo> {
             buildMenuItem(
               icon: Icons.person_2_outlined,
               title: 'My Profile',
-              subtitle: '',
+              // subtitle: '',
               onTap: () {},
             ),
             buildMenuItem(
               icon: Icons.location_on_outlined,
               title: 'My Address',
-              subtitle: '',
+              // subtitle: '',
               onTap: () {},
             ),
             buildMenuItem(
@@ -122,7 +122,7 @@ class _UserInfoState extends State<UserInfo> {
                 context,
                 MaterialPageRoute(builder: (_) => Cartitems()),
               ),
-              subtitle: '',
+              // subtitle: '',
             ),
             buildMenuItem(
               icon: Icons.favorite_border_outlined,
@@ -131,42 +131,13 @@ class _UserInfoState extends State<UserInfo> {
                 context,
                 MaterialPageRoute(builder: (_) => WishlistScreen()),
               ),
-              subtitle: '',
+              // subtitle: '',
             ),
-            buildMenuItem(
-              icon: Icons.wallet_giftcard_outlined,
-              title: 'Earn & Redeem',
-              subtitle: 'View prizes and rewards',
-              onTap: () {},
-            ),
-            buildMenuItem(
-              icon: Icons.edit_calendar_outlined,
-              title: 'Manage Account',
-              subtitle: 'Profile & saved addresses',
-              onTap: () {},
-            ),
-            buildMenuItem(
-              icon: Icons.admin_panel_settings_outlined,
-              title: 'Challenges',
-              subtitle: 'Complete fun tasks',
-              onTap: () {},
-            ),
-            buildMenuItem(
-              icon: Icons.savings_outlined,
-              title: 'Personal Loan',
-              subtitle: 'Instant cash up to ₹10,00,000',
-              onTap: () {},
-            ),
-            buildMenuItem(
-              icon: Icons.payment_outlined,
-              title: 'Payments',
-              subtitle: 'Balance & payment methods',
-              onTap: () {},
-            ),
+
             buildMenuItem(
               icon: Icons.settings,
               title: 'Settings',
-              subtitle: 'Manage notifications',
+
               onTap: () {},
             ),
             const SizedBox(height: 20),
@@ -174,7 +145,6 @@ class _UserInfoState extends State<UserInfo> {
         ),
       ),
 
-      // Logout Button
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ElevatedButton(
