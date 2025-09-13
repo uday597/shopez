@@ -106,13 +106,13 @@ class _UserInfoState extends State<UserInfo> {
             buildMenuItem(
               icon: Icons.person_2_outlined,
               title: 'My Profile',
-              // subtitle: '',
+
               onTap: () {},
             ),
             buildMenuItem(
               icon: Icons.location_on_outlined,
               title: 'My Address',
-              // subtitle: '',
+
               onTap: () {},
             ),
             buildMenuItem(
@@ -122,7 +122,6 @@ class _UserInfoState extends State<UserInfo> {
                 context,
                 MaterialPageRoute(builder: (_) => Cartitems()),
               ),
-              // subtitle: '',
             ),
             buildMenuItem(
               icon: Icons.favorite_border_outlined,
@@ -131,7 +130,6 @@ class _UserInfoState extends State<UserInfo> {
                 context,
                 MaterialPageRoute(builder: (_) => WishlistScreen()),
               ),
-              // subtitle: '',
             ),
 
             buildMenuItem(

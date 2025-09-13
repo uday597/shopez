@@ -70,7 +70,14 @@ class _ProductlistState extends State<Productlist> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    int crossAxisCount = (screenWidth ~/ 250).clamp(1, 4);
+    int crossAxisCount;
+    if (screenWidth < 600) {
+      crossAxisCount = 2;
+    } else if (screenWidth < 900) {
+      crossAxisCount = 3;
+    } else {
+      crossAxisCount = 4;
+    }
 
     double aspectRatio = (screenWidth / crossAxisCount) / (screenHeight * 0.35);
 
