@@ -66,18 +66,14 @@ class _ProductlistState extends State<Productlist> {
     if (productlist.isEmpty && provider.list.isNotEmpty) {
       productlist = provider.list;
     }
-    double widthsize = MediaQuery.of(context).size.width;
-    int crossAxisCount = 2;
 
-    if (widthsize < 391) {
-      crossAxisCount = 1;
-    } else if (widthsize > 733) {
-      crossAxisCount = 3;
-    }
-    double itemWidth = (widthsize / crossAxisCount) - 20;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
-    double itemHeight = 260;
-    double aspectRatio = itemWidth / itemHeight;
+    int crossAxisCount = (screenWidth ~/ 250).clamp(1, 4);
+
+    double aspectRatio = (screenWidth / crossAxisCount) / (screenHeight * 0.35);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 60),
@@ -399,18 +395,18 @@ class _ProductlistState extends State<Productlist> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Product Image
-                                  Container(
-                                    height: 130,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(box.url),
-                                        fit: BoxFit.contain,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(box.url),
+                                          fit: BoxFit.contain,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                        ),
                                       ),
                                     ),
                                   ),
