@@ -103,17 +103,12 @@ class CartProviders with ChangeNotifier {
             .match({'user_id': user.id, 'product_id': products.id});
       } else {
         _itemList.removeAt(index);
-        await supabase
-            .from('cart')
-            .update({'quantity': _itemList[index].quantity})
-            .match({'user_id': user.id, 'product_id': products.id});
+        await supabase.from('cart').delete().match({
+          'user_id': user.id,
+          'product_id': products.id,
+        });
       }
     }
-    await supabase
-        .from('cart')
-        .update({'quantity': _itemList[index].quantity})
-        .match({'user_id': user.id, 'product_id': products.id});
-    notifyListeners();
   }
 
   double get totalPrice {
