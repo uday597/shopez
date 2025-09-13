@@ -6,7 +6,8 @@ class CartProviders with ChangeNotifier {
   List<Product> _itemList = [];
 
   List<Product> get itemList => _itemList;
-
+  bool _isloading = true;
+  bool get isloading => _isloading;
   Future<void> loadItems() async {
     final user = supabase.auth.currentUser;
     if (user == null) return;
@@ -20,16 +21,7 @@ class CartProviders with ChangeNotifier {
       product.quantity = item['quantity'];
       return product;
     }).toList();
-    // _itemList = response.map((item) {
-    //   final product = item['product'];
-    //   return {
-    //     'id': product['id'],
-    //     'name': product['name'],
-    //     'url': product['url'],
-    //     'price': product['price'],
-    //     'quantity': item['quantity'],
-    //   };
-    // }).toList();
+    _isloading = false;
 
     notifyListeners();
   }

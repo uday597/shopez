@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  bool isloading = false;
   Future<void> login() async {
     final email = namecontroller.text.trim();
     final password = passwordcontroller.text.trim();
@@ -29,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
       _showErrorDialog('Login failed. Please enter your details.');
       return;
     }
+    setState(() {
+      isloading = true;
+    });
     try {
       final response = await Supabase.instance.client.auth.signInWithPassword(
         email: email,
@@ -42,6 +46,10 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       _showErrorDialog("Error: $e");
+    } finally {
+      setState(() {
+        isloading = false;
+      });
     }
   }
 
@@ -83,12 +91,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // 🔥 Gradient background like homepage AppBar
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 255, 106, 76), // Orange
-              Color.fromARGB(255, 238, 19, 118), // Pink
+              Color.fromARGB(255, 255, 106, 76),
+              Color.fromARGB(255, 238, 19, 118),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -101,7 +108,6 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo + App Name
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -123,7 +129,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 50),
 
-                  // White card with inputs
                   Container(
                     padding: const EdgeInsets.all(25),
                     decoration: BoxDecoration(
@@ -167,7 +172,8 @@ class _LoginPageState extends State<LoginPage> {
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: login,
+                            onPressed: isloading ? null : login,
+
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color.fromARGB(
                                 255,
@@ -179,14 +185,20 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
-                            child: const Text(
-                              "LOGIN",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: isloading
+                                ? Center(
+                                    child: const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Text(
+                                    "LOGIN",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -230,7 +242,6 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 30),
 
-                  // Social Login Section
                   const Text(
                     "Or sign in with",
                     style: TextStyle(
@@ -275,7 +286,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // 🔘 Reusable Social Button
   Widget _socialIcon(String url) {
     return CircleAvatar(
       radius: 22,

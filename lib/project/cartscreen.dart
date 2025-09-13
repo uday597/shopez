@@ -13,6 +13,7 @@ class Cartitems extends StatefulWidget {
 class _CartitemsState extends State<Cartitems> {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<CartProviders>(context);
     Provider.of<CartProviders>(context, listen: false).loadItems();
     final cartitem = Provider.of<CartProviders>(context).itemList;
 
@@ -54,61 +55,64 @@ class _CartitemsState extends State<Cartitems> {
         ),
       ),
 
-      body: ListView.builder(
-        itemCount: cartitem.length,
-        itemBuilder: (context, index) {
-          final item = cartitem[index];
-          return Padding(
-            padding: const EdgeInsets.only(right: 10, left: 10, top: 3),
-            child: Card(
-              key: ValueKey(item.id),
-              child: ListTile(
-                leading: CircleAvatar(
-                  radius: 15,
-                  backgroundImage: NetworkImage(item.url),
-                ),
-                title: Text(
-                  item.name,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text('₹${item.price}'),
-                trailing: SizedBox(
-                  width: 180,
-                  child: Consumer<CartProviders>(
-                    builder: (context, value, child) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              value.decrementQuantity(item);
-                            },
-                            icon: Icon(Icons.remove),
-                          ),
+      body: provider.isloading
+          ? Center(child: const CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: cartitem.length,
+              itemBuilder: (context, index) {
+                final item = cartitem[index];
 
-                          Text(item.quantity.toString()),
-                          IconButton(
-                            onPressed: () {
-                              value.incrementQuantity(item);
-                            },
-                            icon: Icon(Icons.add),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              value.removeItem(item);
-                            },
-                            icon: Icon(Icons.delete),
-                          ),
-                        ],
-                      );
-                    },
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10, left: 10, top: 3),
+                  child: Card(
+                    key: ValueKey(item.id),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 15,
+                        backgroundImage: NetworkImage(item.url),
+                      ),
+                      title: Text(
+                        item.name,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('₹${item.price}'),
+                      trailing: SizedBox(
+                        width: 180,
+                        child: Consumer<CartProviders>(
+                          builder: (context, value, child) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    value.decrementQuantity(item);
+                                  },
+                                  icon: Icon(Icons.remove),
+                                ),
+
+                                Text(item.quantity.toString()),
+                                IconButton(
+                                  onPressed: () {
+                                    value.incrementQuantity(item);
+                                  },
+                                  icon: Icon(Icons.add),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    value.removeItem(item);
+                                  },
+                                  icon: Icon(Icons.delete),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
       bottomNavigationBar: Consumer<CartProviders>(
         builder: (context, value, child) {
           return Padding(
