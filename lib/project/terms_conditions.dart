@@ -69,7 +69,19 @@ For questions or support regarding these terms, please contact our customer serv
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "📅 Last Updated: September 2025",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ),
             Column(
               children: [
                 Padding(

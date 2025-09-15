@@ -261,10 +261,10 @@ class _ProductlistState extends State<Productlist> {
                         ],
                       ),
                       child: TextField(
-                        // onChanged: searchfilter,
                         controller: searchcontroller,
                         onChanged: (value) {
                           _applyFilters(value, selectedFilter);
+                          setState(() {});
                         },
                         decoration: InputDecoration(
                           hintText: 'Search...',
@@ -355,7 +355,71 @@ class _ProductlistState extends State<Productlist> {
                 ),
               ],
             ),
-
+            if (searchcontroller.text.isEmpty)
+              SizedBox(
+                height: 150,
+                child: PageView(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://t4.ftcdn.net/jpg/04/08/32/77/360_F_408327760_UE3Ni9EwNPScQO6mxb8XYIHrpwI0St8m.jpg",
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://img1.paisawapas.com/images/2025/09/02131949/croma-PaisaWapas-Deal.jpg",
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://cdn.grabon.in/gograbon/images/web-images/uploads/1617875488697/clothing-offers.jpg",
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(10),
               child: provider.isloading

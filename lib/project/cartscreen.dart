@@ -65,7 +65,11 @@ class _CartitemsState extends State<Cartitems> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 10, left: 10, top: 3),
                   child: Card(
-                    key: ValueKey(item.id),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 15,
