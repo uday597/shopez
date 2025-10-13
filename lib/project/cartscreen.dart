@@ -60,7 +60,7 @@ class _CartitemsState extends State<Cartitems> {
           : ListView.builder(
               itemCount: cartitem.length,
               itemBuilder: (context, index) {
-                final item = cartitem[index];
+                final data = cartitem[index];
 
                 return Padding(
                   padding: const EdgeInsets.only(right: 10, left: 10, top: 3),
@@ -73,13 +73,13 @@ class _CartitemsState extends State<Cartitems> {
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 15,
-                        backgroundImage: NetworkImage(item.url),
+                        backgroundImage: NetworkImage(data.url),
                       ),
                       title: Text(
-                        item.name,
+                        data.name,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text('₹${item.price}'),
+                      subtitle: Text('₹${data.price}'),
                       trailing: SizedBox(
                         width: 180,
                         child: Consumer<CartProviders>(
@@ -89,21 +89,21 @@ class _CartitemsState extends State<Cartitems> {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    value.decrementQuantity(item);
+                                    value.decrementQuantity(data);
                                   },
                                   icon: Icon(Icons.remove),
                                 ),
 
-                                Text(item.quantity.toString()),
+                                Text(data.quantity.toString()),
                                 IconButton(
                                   onPressed: () {
-                                    value.incrementQuantity(item);
+                                    value.incrementQuantity(data);
                                   },
                                   icon: Icon(Icons.add),
                                 ),
                                 IconButton(
                                   onPressed: () {
-                                    value.removeItem(item);
+                                    value.removeItem(data);
                                   },
                                   icon: Icon(Icons.delete),
                                 ),
@@ -145,22 +145,17 @@ class _CartitemsState extends State<Cartitems> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => AccountPage()),
-                      // );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 228, 73, 26),
-                      foregroundColor: Colors.white,
-                    ),
-                    child: Text('Buy'),
-                  ),
-                ),
+                // SizedBox(
+                //   width: 100,
+                //   child: ElevatedButton(
+                //     onPressed: () {},
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: const Color.fromARGB(255, 228, 73, 26),
+                //       foregroundColor: Colors.white,
+                //     ),
+                //     child: Text('Buy all'),
+                //   ),
+                // ),
               ],
             ),
           );

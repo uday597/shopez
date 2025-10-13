@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shopease/project/Wishlist.dart';
-import 'package:shopease/project/cartscreen.dart';
+import 'package:shopease/project/myorders.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'home/widgets/container.dart';
@@ -120,7 +120,7 @@ class _UserInfoState extends State<UserInfo> {
               title: 'Orders',
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => Cartitems()),
+                MaterialPageRoute(builder: (_) => Myorders()),
               ),
             ),
             buildMenuItem(
@@ -136,7 +136,28 @@ class _UserInfoState extends State<UserInfo> {
               icon: Icons.settings,
               title: 'Settings',
 
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(20),
+                    ),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Coming Soon  🚀',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
           ],

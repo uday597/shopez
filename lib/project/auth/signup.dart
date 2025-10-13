@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'login_page.dart';
 
@@ -14,6 +16,46 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController usernamecontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController newpasswordcontroller = TextEditingController();
+  Future<void> signInWithGoogle() async {
+    const webclientId =
+        '328135893388-i1abl4qn7t84jhll1439rs8pn5dp3o0p.apps.googleusercontent.com';
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+
+      await googleSignIn.initialize(serverClientId: webclientId);
+
+      if (googleSignIn.supportsAuthenticate()) {
+        final googleUser = await googleSignIn.authenticate();
+
+        final googleAuth = await googleUser.authentication;
+
+        final idToken = googleAuth.idToken;
+
+        if (idToken == null) {
+          throw 'No ID Token found.';
+        }
+
+        final response = await Supabase.instance.client.auth.signInWithIdToken(
+          provider: OAuthProvider.google,
+          idToken: idToken,
+        );
+
+        final user = response.user;
+
+        if (user == null) {
+          debugPrint("Supabase login failed: No user found");
+          return;
+        }
+
+        debugPrint("User logged in successfully: ${user.email}");
+        if (mounted) {
+          context.go('/home');
+        }
+      }
+    } catch (e) {
+      debugPrint("Google Sign-In error: $e");
+    }
+  }
 
   Future<void> signup() async {
     final supabase = Supabase.instance.client;
@@ -263,30 +305,44 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   const SizedBox(height: 30),
 
-                  // Social Signup
                   const Text(
-                    "Or sign up with",
+                    "Or ",
                     style: TextStyle(
+                      fontSize: 15,
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _socialIcon(
-                        "https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yD/r/5D8s-GsHJlJ.png",
+
+                  GestureDetector(
+                    onTap: () {
+                      signInWithGoogle();
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
+
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                      const SizedBox(width: 20),
-                      _socialIcon(
-                        "https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png",
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 14,
+                        children: [
+                          Image.asset('assets/images/google.png', height: 36),
+                          Text(
+                            'Sign in with Google',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 20),
-                      _socialIcon(
-                        "https://storage.needpix.com/rsynced_images/twitter-2672572_1280.jpg",
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -294,15 +350,6 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
-    );
-  }
-
-  // 🔘 Same reusable social button
-  Widget _socialIcon(String url) {
-    return CircleAvatar(
-      radius: 22,
-      backgroundColor: Colors.white,
-      child: CircleAvatar(radius: 20, backgroundImage: NetworkImage(url)),
     );
   }
 }

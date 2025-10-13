@@ -116,9 +116,12 @@ class AboutUspage extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              Image.network(
-                'https://tngdefense.com/wp-content/uploads/2024/01/TNG-Core-Values_v3-1024x506.png',
-                height: 180,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.network(
+                  'https://tngdefense.com/wp-content/uploads/2024/01/TNG-Core-Values_v3-1024x506.png',
+                  height: 300,
+                ),
               ),
               SizedBox(height: 30),
               Row(

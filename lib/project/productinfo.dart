@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopease/modal/modal_class.dart';
+import 'package:shopease/project/paymentscreen.dart';
 
 import 'package:shopease/providers/cart_provider.dart';
 
@@ -17,11 +18,6 @@ class Itemsinfo extends StatefulWidget {
 class _ItemsinfoState extends State<Itemsinfo> {
   @override
   Widget build(BuildContext context) {
-    // void savedata() {
-    //   final database = Hive.box('myBox');
-    //   database.put('items', widget.list);
-    // }
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 60),
@@ -44,171 +40,271 @@ class _ItemsinfoState extends State<Itemsinfo> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Column(
-              children: [
-                SizedBox(height: 20),
-                Image.network(widget.list.url, height: 250),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.list.name,
+            SizedBox(height: 20),
+            Image.network(widget.list.url, height: 250),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.list.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                  Text(
+                    'Availble in stock',
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Row(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'Price: ',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          color: Color.fromARGB(223, 0, 0, 0),
+                          fontSize: 22,
                         ),
-                      ),
-                      Text(
-                        'Availble in stock',
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
 
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'Price: ',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(223, 0, 0, 0),
-                              fontSize: 20,
-                            ),
-
-                            children: [
-                              TextSpan(
-                                text: widget.list.price.toString(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: const Color.fromARGB(192, 0, 0, 0),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Container(
-                        height: 20,
-                        width: 60,
-                        color: const Color.fromARGB(255, 177, 17, 6),
-                        child: Center(
-                          child: Text(
-                            widget.list.discount,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
+                        children: [
+                          TextSpan(
+                            text: widget.list.price.toString(),
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: const Color.fromARGB(192, 0, 0, 0),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-                Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Text(
-                          'Description:',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
+                  ),
+                  SizedBox(width: 5),
+                  Container(
+                    height: 20,
+                    width: 60,
+                    color: const Color.fromARGB(255, 177, 17, 6),
+                    child: Center(
                       child: Text(
-                        widget.list.description,
+                        widget.list.discount,
                         style: const TextStyle(
-                          color: Color.fromARGB(150, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
+                          color: Colors.white,
+                          fontSize: 14,
                         ),
                       ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  'Description:',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                widget.list.description,
+                style: const TextStyle(
+                  color: Color.fromARGB(150, 0, 0, 0),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    spacing: 6,
+                    children: [
+                      Icon(
+                        Icons.lock,
+                        color: Color.fromARGB(150, 0, 0, 0),
+                        size: 30,
+                      ),
+                      Text(
+                        'Secure Payment',
+                        style: TextStyle(
+                          color: Color.fromARGB(150, 0, 0, 0),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    spacing: 6,
+                    children: [
+                      Icon(
+                        Icons.fire_truck,
+                        size: 30,
+                        color: Color.fromARGB(150, 0, 0, 0),
+                      ),
+                      Text(
+                        'COD Available',
+                        style: TextStyle(
+                          color: Color.fromARGB(150, 0, 0, 0),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                spacing: 6,
+                children: [
+                  Icon(
+                    Icons.public,
+                    color: Color.fromARGB(150, 0, 0, 0),
+                    size: 30,
+                  ),
+                  Text(
+                    'Worldwide Shipping',
+                    style: TextStyle(
+                      color: Color.fromARGB(150, 0, 0, 0),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (_) {
-                return AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Buyscreen(box: widget.list),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 252, 86, 36),
+            ),
+            child: Row(
+              spacing: 8,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Buy Now',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  title: Text(
-                    "🎉 Added to Cart!",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  content: Text(
-                    "Your item has been added to your cart successfully.",
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                  ),
-                  actions: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.deepOrange,
-
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("OK"),
-                    ),
-                  ],
-                );
-              },
-            );
-            // savedata();
-            Provider.of<CartProviders>(
-              context,
-              listen: false,
-            ).addItem(widget.list);
-          },
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(380, 50),
-            backgroundColor: const Color.fromARGB(255, 252, 86, 36),
-          ),
-
-          child: const Text(
-            'Add To Cart',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 17,
+                ),
+                Icon(Icons.shopping_bag, size: 20),
+              ],
             ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      title: Text(
+                        "🎉 Added to Cart!",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      content: Text(
+                        "Your item has been added to your cart successfully.",
+                        style: TextStyle(fontSize: 16, color: Colors.black87),
+                      ),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.deepOrange,
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("OK"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                Provider.of<CartProviders>(
+                  context,
+                  listen: false,
+                ).addItem(widget.list);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: const Color.fromARGB(255, 252, 86, 36),
+              ),
+
+              child: Row(
+                spacing: 8,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: const Text(
+                      'Add To Cart',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.shopping_cart, size: 20),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
