@@ -37,11 +37,6 @@ class CartProviders with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearItem() {
-    _itemList.clear();
-    notifyListeners();
-  }
-
   Future<void> addItem(Product product) async {
     final user = supabase.auth.currentUser;
     if (user == null) return;
@@ -101,6 +96,7 @@ class CartProviders with ChangeNotifier {
         });
       }
     }
+    notifyListeners();
   }
 
   double get totalPrice {

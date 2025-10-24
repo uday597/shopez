@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopease/project/paymentscreen.dart';
 import 'package:shopease/providers/cart_provider.dart';
 
 import 'package:provider/provider.dart';
@@ -32,134 +33,190 @@ class _CartitemsState extends State<Cartitems> {
             title: Text('Cart Items'),
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.white,
-            actions: [
-              Consumer<CartProviders>(
-                builder: (context, items, child) {
-                  return Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          items.clearItem();
-                        },
-                        child: Text(
-                          'Clear Cart',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
           ),
         ),
       ),
 
-      body: provider.isloading
-          ? Center(child: const CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: cartitem.length,
-              itemBuilder: (context, index) {
-                final data = cartitem[index];
+      body: Container(
+        decoration: BoxDecoration(),
+        child: provider.isloading
+            ? Center(child: const CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: cartitem.length,
+                itemBuilder: (context, index) {
+                  final data = cartitem[index];
 
-                return Padding(
-                  padding: const EdgeInsets.only(right: 10, left: 10, top: 3),
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 15,
-                        backgroundImage: NetworkImage(data.url),
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10, left: 10, top: 3),
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      title: Text(
-                        data.name,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text('₹${data.price}'),
-                      trailing: SizedBox(
-                        width: 180,
-                        child: Consumer<CartProviders>(
-                          builder: (context, value, child) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    value.decrementQuantity(data);
-                                  },
-                                  icon: Icon(Icons.remove),
-                                ),
 
-                                Text(data.quantity.toString()),
-                                IconButton(
-                                  onPressed: () {
-                                    value.incrementQuantity(data);
-                                  },
-                                  icon: Icon(Icons.add),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    value.removeItem(data);
-                                  },
-                                  icon: Icon(Icons.delete),
-                                ),
-                              ],
-                            );
-                          },
+                      child: ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(40),
+                          child: Image.network(
+                            data.url,
+                            fit: BoxFit.contain,
+                            height: 60,
+                            width: 60,
+                          ),
+                        ),
+                        title: Text(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          data.name,
+                          style: TextStyle(
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                        subtitle: Text('₹${data.price}', maxLines: 1),
+                        trailing: SizedBox(
+                          width: 180,
+                          child: Consumer<CartProviders>(
+                            builder: (context, value, child) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      value.decrementQuantity(data);
+                                    },
+                                    icon: Icon(Icons.remove),
+                                  ),
+
+                                  Text(data.quantity.toString()),
+                                  IconButton(
+                                    onPressed: () {
+                                      value.incrementQuantity(data);
+                                    },
+                                    icon: Icon(Icons.add),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text(
+                                            'Remove Item',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'Are you sure you want to remove this item from cart',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              onPressed: () {
+                                                value.removeItem(data);
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text(
+                                                'Delete',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(Icons.delete),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-      bottomNavigationBar: Consumer<CartProviders>(
-        builder: (context, value, child) {
-          return Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Total Price : ',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                  );
+                },
+              ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(),
+        child: Consumer<CartProviders>(
+          builder: (context, value, child) {
+            return Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Total Price : ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
-                    ),
 
-                    Text(
-                      ' ${value.totalPrice}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: const Color.fromARGB(255, 43, 15, 90),
-                        fontWeight: FontWeight.w900,
+                      Text(
+                        ' ${value.totalPrice}',
+                        style: TextStyle(
+                          fontSize: 20,
+
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color.fromARGB(255, 255, 184, 184),
+                            Colors.red,
+                          ],
+                        ),
+                      ),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Paymentscreen(itemPrice: value.totalPrice),
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Text('Buy all'),
                       ),
                     ),
-                  ],
-                ),
-                // SizedBox(
-                //   width: 100,
-                //   child: ElevatedButton(
-                //     onPressed: () {},
-                //     style: ElevatedButton.styleFrom(
-                //       backgroundColor: const Color.fromARGB(255, 228, 73, 26),
-                //       foregroundColor: Colors.white,
-                //     ),
-                //     child: Text('Buy all'),
-                //   ),
-                // ),
-              ],
-            ),
-          );
-        },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

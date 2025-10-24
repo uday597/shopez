@@ -150,29 +150,39 @@ class _ContactInfoState extends State<ContactInfo> {
                       const SizedBox(height: 24),
 
                       Center(
-                        child: TextButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text('Submitted'),
-                                content: Text(
-                                  'Your request has been received ',
-                                ),
-                              ),
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.deepPurple,
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(250, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.red,
+
+                                const Color.fromARGB(255, 255, 184, 184),
+                              ],
                             ),
                           ),
-                          child: const Text(
-                            'Submit Request',
-                            style: TextStyle(fontSize: 16),
+                          child: TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Submitted'),
+                                  content: Text(
+                                    'Your request has been received ',
+                                  ),
+                                ),
+                              );
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size(250, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Submit Request',
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
                         ),
                       ),

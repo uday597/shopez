@@ -1,7 +1,6 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shopease/project/auth/resetpass.dart';
 import 'package:shopease/project/homescreen.dart';
 import 'package:shopease/project/auth/login_page.dart';
@@ -20,10 +19,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
-
-  await Hive.initFlutter();
-  await Hive.openBox('myBox');
-
+  final user = Supabase.instance.client.auth.currentUser;
   runApp(
     MultiProvider(
       providers: [
@@ -32,47 +28,66 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CartProviders()),
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
       ],
-      child: const MyApp(),
+
+      child: MyApp(startpage: user == null ? '/' : '/home'),
     ),
   );
 }
 
-final GoRouter _router = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return LoginPage();
-      },
-    ),
-    GoRoute(
-      path: '/home',
-      builder: (BuildContext context, GoRouterState state) {
-        return Productlist();
-      },
-    ),
-    GoRoute(
-      path: '/reset',
-      builder: (BuildContext context, GoRouterState state) {
-        return const Resetpassword();
-      },
-    ),
-  ],
-);
+// final GoRouter _router = GoRouter(
+//   routes: <RouteBase>[
+//     GoRoute(
+//       path: '/',
+//       builder: (BuildContext context, GoRouterState state) {
+//         return LoginPage();
+//       },
+//     ),
+//     GoRoute(
+//       path: '/login',
+//       builder: (context, state) {
+//         return LoginPage();
+//       },
+//     ),
+//     GoRoute(
+//       path: '/home',
+//       builder: (BuildContext context, GoRouterState state) {
+//         return Productlist();
+//       },
+//     ),
+//     GoRoute(
+//       path: '/reset',
+//       builder: (BuildContext context, GoRouterState state) {
+//         return const Resetpassword();
+//       },
+//     ),
+//   ],
+// );
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final String startpage;
+  const MyApp({super.key, required this.startpage});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  late final GoRouter _router;
   late final AppLinks _appLinks;
 
   @override
   void initState() {
     super.initState();
+
+    _router = GoRouter(
+      initialLocation: widget.startpage,
+      routes: [
+        GoRoute(path: '/', builder: (_, __) => LoginPage()),
+        GoRoute(path: '/home', builder: (_, __) => Productlist()),
+        GoRoute(path: '/reset', builder: (_, __) => const Resetpassword()),
+      ],
+    );
+
     _initDeepLinks();
   }
 
@@ -93,8 +108,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp.router(
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-
+      title: 'ShopEase',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),

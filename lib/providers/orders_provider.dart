@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shopease/project/account_page.dart';
 
 class OrdersProvider extends ChangeNotifier {
@@ -9,17 +10,23 @@ class OrdersProvider extends ChangeNotifier {
     if (user == null) return;
     final response = await supabase
         .from('orders')
-        .select('product(*)')
-        .eq('user_id', user.id);
+        .select('product(*),date')
+        .eq('user_id', user.id)
+        .order('date', ascending: false);
 
     final neworder = await response.map((item) {
       final product = item['product'];
+      final createdAt = item['date'];
+      String foramttedDate = DateFormat(
+        'dd MMM yyy,hh:mm a',
+      ).format(DateTime.parse(createdAt));
       return {
         'id': product['id'],
         'name': product['name'],
         'url': product['url'],
         'price': product['price'],
         'category': product['category'],
+        'date': foramttedDate,
       };
     }).toList();
     final ids = <dynamic>{};
@@ -37,13 +44,19 @@ class OrdersProvider extends ChangeNotifier {
     await supabase.from('orders').insert({
       'user_id': user.id,
       'product_id': product['id'],
+      'date': DateTime.now().toIso8601String(),
     });
+    final formattedDate = DateFormat(
+      'dd MMM yyyy, hh:mm a',
+    ).format(DateTime.now());
+
     _orderList.add({
       'id': product['id'],
       'name': product['name'],
       'url': product['url'],
       'price': product['price'],
       'category': product['category'],
+      'date': formattedDate,
     });
     notifyListeners();
   }

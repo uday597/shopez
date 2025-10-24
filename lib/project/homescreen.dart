@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shopease/project/about_us.dart';
 import 'package:shopease/project/cartscreen.dart';
 import 'package:shopease/project/contact_us.dart';
@@ -51,12 +50,12 @@ class _ProductlistState extends State<Productlist> {
     });
   }
 
-  Future<void> _signout(BuildContext context) async {
-    await Supabase.instance.client.auth.signOut();
-    if (context.mounted) {
-      context.go('/');
-    }
-  }
+  // Future<void> _signout(BuildContext context) async {
+  //   await Supabase.instance.client.auth.signOut();
+  //   if (context.mounted) {
+  //     context.go('/');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +81,9 @@ class _ProductlistState extends State<Productlist> {
     double aspectRatio = (screenWidth / crossAxisCount) / (screenHeight * 0.35);
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 60),
-        child: Container(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -95,52 +94,51 @@ class _ProductlistState extends State<Productlist> {
               end: Alignment.bottomRight,
             ),
           ),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Row(
-              children: [
-                Image.asset('assets/images/applogo.png', height: 55, width: 60),
-                Text(
-                  'ShopEase',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                ),
-              ],
-            ),
-
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WishlistScreen()),
-                  );
-                },
-                icon: Icon(Icons.favorite_border_outlined),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserInfo()),
-                  );
-                },
-                icon: Icon(Icons.person_2_outlined),
-              ),
-
-              Builder(
-                builder: (context) => IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                  icon: Icon(Icons.menu),
-                ),
-              ),
-            ],
-
-            foregroundColor: Colors.white,
-          ),
         ),
+
+        title: Row(
+          children: [
+            Image.asset('assets/images/applogo.png', height: 55, width: 60),
+            Text(
+              'ShopEase',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+            ),
+          ],
+        ),
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WishlistScreen()),
+              );
+            },
+            icon: Icon(Icons.favorite_border_outlined),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserInfo()),
+              );
+            },
+            icon: Icon(Icons.person_2_outlined),
+          ),
+
+          Builder(
+            builder: (context) => IconButton(
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+              icon: Icon(Icons.menu),
+            ),
+          ),
+        ],
+
+        foregroundColor: Colors.white,
       ),
+
       endDrawer: Drawer(
         width: 250,
         child: ListView(
@@ -218,21 +216,21 @@ class _ProductlistState extends State<Productlist> {
                 );
               },
             ),
-            SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  await _signout(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 240, 41, 117),
-                  minimumSize: Size(double.infinity, 34),
-                ),
-                child: Text('Logout', style: TextStyle(color: Colors.white)),
-              ),
-            ),
+            // SizedBox(height: 50),
+            // Padding(
+            //   padding: const EdgeInsets.all(10.0),
+            //   child: ElevatedButton(
+            //     onPressed: () async {
+            //       Navigator.pop(context);
+            //       await _signout(context);
+            //     },
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: const Color.fromARGB(255, 240, 41, 117),
+            //       minimumSize: Size(double.infinity, 34),
+            //     ),
+            //     child: Text('Logout', style: TextStyle(color: Colors.white)),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -357,25 +355,33 @@ class _ProductlistState extends State<Productlist> {
             ),
             if (searchcontroller.text.isEmpty)
               SizedBox(
-                height: 150,
+                height: 180,
                 child: PageView(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 6,
-                            offset: Offset(0, 3),
+                    GestureDetector(
+                      onTap: () {
+                        _applyFilters('', 'Mens');
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              "https://t4.ftcdn.net/jpg/04/08/32/77/360_F_408327760_UE3Ni9EwNPScQO6mxb8XYIHrpwI0St8m.jpg",
+                            ),
+                            fit: BoxFit.fill,
                           ),
-                        ],
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            "https://t4.ftcdn.net/jpg/04/08/32/77/360_F_408327760_UE3Ni9EwNPScQO6mxb8XYIHrpwI0St8m.jpg",
-                          ),
-                          fit: BoxFit.fill,
                         ),
                       ),
                     ),
@@ -528,20 +534,29 @@ class _ProductlistState extends State<Productlist> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Container(
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    const Color.fromARGB(
+                                                      255,
+                                                      255,
+                                                      184,
+                                                      184,
+                                                    ),
+                                                    Colors.red,
+                                                  ],
+                                                ),
+                                              ),
                                               height: 20,
                                               width: 60,
-                                              color: const Color.fromARGB(
-                                                255,
-                                                177,
-                                                17,
-                                                6,
-                                              ),
+
                                               child: Center(
                                                 child: Text(
                                                   box.discount,
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ),
@@ -599,11 +614,3 @@ class _ProductlistState extends State<Productlist> {
     );
   }
 }
-
-// class Product {
-//   final String name;
-//   final String description;
-//   double price = 9;
-
-//   Product(this.price, {required this.name, required this.description});
-// }

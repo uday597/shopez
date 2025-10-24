@@ -7,9 +7,9 @@ Widget buildMenuItem({
   VoidCallback? onTap,
 }) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6),
+    padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 2),
     child: Card(
-      elevation: 2,
+      elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: ListTile(
         leading: Icon(icon, color: Colors.pinkAccent),

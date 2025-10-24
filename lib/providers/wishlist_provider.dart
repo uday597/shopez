@@ -21,6 +21,7 @@ class WishlistProvider extends ChangeNotifier {
         'name': product['name'],
         'url': product['url'],
         'price': product['price'],
+        'category': product['category'],
       };
     }).toList();
     final ids = <dynamic>{};
@@ -44,6 +45,7 @@ class WishlistProvider extends ChangeNotifier {
       'name': product['name'],
       'url': product['url'],
       'price': product['price'],
+      'category': product['category'],
     });
     notifyListeners();
   }

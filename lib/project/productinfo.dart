@@ -93,9 +93,16 @@ class _ItemsinfoState extends State<Itemsinfo> {
                   ),
                   SizedBox(width: 5),
                   Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color.fromARGB(255, 255, 184, 184),
+                          Colors.red,
+                        ],
+                      ),
+                    ),
                     height: 20,
                     width: 60,
-                    color: const Color.fromARGB(255, 177, 17, 6),
                     child: Center(
                       child: Text(
                         widget.list.discount,
@@ -209,99 +216,102 @@ class _ItemsinfoState extends State<Itemsinfo> {
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Buyscreen(box: widget.list),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: const Color.fromARGB(255, 252, 86, 36),
-            ),
-            child: Row(
-              spacing: 8,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Buy Now',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                ),
-                Icon(Icons.shopping_bag, size: 20),
-              ],
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      title: Text(
-                        "🎉 Added to Cart!",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      content: Text(
-                        "Your item has been added to your cart successfully.",
-                        style: TextStyle(fontSize: 16, color: Colors.black87),
-                      ),
-                      actions: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.deepOrange,
-
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text("OK"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-
-                Provider.of<CartProviders>(
+                Navigator.push(
                   context,
-                  listen: false,
-                ).addItem(widget.list);
+                  MaterialPageRoute(
+                    builder: (context) => Paymentscreen(box: widget.list),
+                  ),
+                );
               },
-              style: ElevatedButton.styleFrom(
+              style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: const Color.fromARGB(255, 252, 86, 36),
               ),
-
               child: Row(
                 spacing: 8,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(2.0),
-                    child: const Text(
-                      'Add To Cart',
+                    child: Text(
+                      'Buy Now',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 17,
+                        fontSize: 18,
                       ),
                     ),
                   ),
-                  Icon(Icons.shopping_cart, size: 20),
+                  Icon(Icons.shopping_bag, size: 20),
                 ],
               ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    title: Text(
+                      "🎉 Added to Cart!",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    content: Text(
+                      "Your item has been added to your cart successfully.",
+                      style: TextStyle(fontSize: 16, color: Colors.black87),
+                    ),
+                    actions: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.deepOrange,
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("OK"),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              Provider.of<CartProviders>(
+                context,
+                listen: false,
+              ).addItem(widget.list);
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 252, 86, 36),
+            ),
+
+            child: Row(
+              spacing: 8,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: const Text(
+                    'Add To Cart',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                Icon(Icons.shopping_cart, size: 20),
+              ],
             ),
           ),
         ],

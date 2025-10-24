@@ -243,26 +243,26 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ForgetPasword(),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                "Forgot Password?",
-                                style: TextStyle(color: Colors.pink),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Align(
+                        //   alignment: Alignment.centerRight,
+                        //   child: TextButton(
+                        //     onPressed: () {},
+                        //     child: GestureDetector(
+                        //       onTap: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) => ForgetPasword(),
+                        //           ),
+                        //         );
+                        //       },
+                        //       child: const Text(
+                        //         "Forgot Password?",
+                        //         style: TextStyle(color: Colors.pink),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,9 +1,9 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shopease/project/Wishlist.dart';
+import 'package:shopease/project/about_us.dart';
+import 'package:shopease/project/cartscreen.dart';
+import 'package:shopease/project/contact_us.dart';
 import 'package:shopease/project/myorders.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,6 +17,9 @@ class UserInfo extends StatefulWidget {
 }
 
 class _UserInfoState extends State<UserInfo> {
+  final user = Supabase.instance.client.auth.currentUser;
+
+  late final photourl = user?.userMetadata?['picture'];
   Future<void> _signout(BuildContext context) async {
     await Supabase.instance.client.auth.signOut();
     if (context.mounted) {
@@ -24,18 +27,19 @@ class _UserInfoState extends State<UserInfo> {
     }
   }
 
-  final user = Supabase.instance.client.auth.currentUser;
-  File? _image;
-  final ImagePicker _picker = ImagePicker();
+  // final user = Supabase.instance.client.auth.currentUser;
 
-  Future<void> _imagepickfun() async {
-    final pickedfile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedfile != null) {
-      setState(() {
-        _image = File(pickedfile.path);
-      });
-    }
-  }
+  // File? _image;
+  // final ImagePicker _picker = ImagePicker();
+
+  // Future<void> _imagepickfun() async {
+  //   final pickedfile = await _picker.pickImage(source: ImageSource.gallery);
+  //   if (pickedfile != null) {
+  //     setState(() {
+  //       _image = File(pickedfile.path);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,7 @@ class _UserInfoState extends State<UserInfo> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(),
           ),
           child: AppBar(
             title: Text("My Profile"),
@@ -64,44 +68,70 @@ class _UserInfoState extends State<UserInfo> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 3,
+                      spreadRadius: 3,
+                      color: const Color.fromARGB(153, 203, 203, 203),
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(22),
+                  gradient: LinearGradient(
+                    colors: [Color(0xFFFF6A4C), Color(0xFFEE1376)],
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 3),
+                          ),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(photourl),
+                          ),
+                        ),
+                      ),
 
-            Center(
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: _imagepickfun,
-                    child: CircleAvatar(
-                      radius: 55,
-                      backgroundColor: Colors.grey.shade200,
-                      backgroundImage: _image != null
-                          ? (kIsWeb
-                                    ? NetworkImage(_image!.path)
-                                    : FileImage(_image!))
-                                as ImageProvider
-                          : null,
-                      child: _image == null
-                          ? const Icon(
-                              Icons.person,
-                              size: 55,
-                              color: Colors.grey,
-                            )
-                          : null,
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          user?.userMetadata?['name'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+
+                      Text(
+                        user?.email ?? 'No Email',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    user?.email ?? 'No Email',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
             buildMenuItem(
               icon: Icons.person_2_outlined,
@@ -110,10 +140,15 @@ class _UserInfoState extends State<UserInfo> {
               onTap: () {},
             ),
             buildMenuItem(
-              icon: Icons.location_on_outlined,
-              title: 'My Address',
+              icon: Icons.shopping_cart_outlined,
+              title: 'Cart',
 
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Cartitems()),
+                );
+              },
             ),
             buildMenuItem(
               icon: Icons.shopping_basket_outlined,
@@ -132,6 +167,22 @@ class _UserInfoState extends State<UserInfo> {
               ),
             ),
 
+            buildMenuItem(
+              icon: Icons.headset_mic_outlined,
+              title: 'Contact us',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ContactInfo()),
+              ),
+            ),
+            buildMenuItem(
+              icon: Icons.info_outline,
+              title: 'About us',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => AboutUspage()),
+              ),
+            ),
             buildMenuItem(
               icon: Icons.settings,
               title: 'Settings',
@@ -165,7 +216,7 @@ class _UserInfoState extends State<UserInfo> {
       ),
 
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () => _signout(context),
           style: ElevatedButton.styleFrom(

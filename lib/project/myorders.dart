@@ -85,8 +85,7 @@ class _MyordersState extends State<Myorders> {
                                 myorder['url'],
                                 width: 60,
                                 height: 60,
-                                fit: BoxFit
-                                    .cover, // ensures the image fits perfectly
+                                fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
                                     Icon(
                                       Icons.image,
@@ -125,6 +124,7 @@ class _MyordersState extends State<Myorders> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  Text('Ordered on: ${myorder['date']}'),
                                 ],
                               ),
                             ),

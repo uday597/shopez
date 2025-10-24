@@ -63,6 +63,21 @@ class _ForgetPaswordState extends State<ForgetPasword> {
                       child: ElevatedButton(
                         onPressed: () {
                           _sendResetEmail();
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              content: Text(
+                                "message sent to email ✉️",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(200, 45),
