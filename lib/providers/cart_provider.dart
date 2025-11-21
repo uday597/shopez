@@ -22,8 +22,6 @@ class CartProviders with ChangeNotifier {
       return product;
     }).toList();
     _isloading = false;
-
-    notifyListeners();
   }
 
   Future<void> removeItem(Product product) async {

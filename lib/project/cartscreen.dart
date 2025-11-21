@@ -13,9 +13,14 @@ class Cartitems extends StatefulWidget {
 
 class _CartitemsState extends State<Cartitems> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<CartProviders>(context, listen: false).loadItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<CartProviders>(context);
-    Provider.of<CartProviders>(context, listen: false).loadItems();
     final cartitem = Provider.of<CartProviders>(context).itemList;
 
     return Scaffold(

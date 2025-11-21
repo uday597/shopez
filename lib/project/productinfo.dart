@@ -139,7 +139,7 @@ class _ItemsinfoState extends State<Itemsinfo> {
                 style: const TextStyle(
                   color: Color.fromARGB(150, 0, 0, 0),
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -156,13 +156,13 @@ class _ItemsinfoState extends State<Itemsinfo> {
                       Icon(
                         Icons.lock,
                         color: Color.fromARGB(150, 0, 0, 0),
-                        size: 30,
+                        size: 26,
                       ),
                       Text(
                         'Secure Payment',
                         style: TextStyle(
                           color: Color.fromARGB(150, 0, 0, 0),
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -173,14 +173,14 @@ class _ItemsinfoState extends State<Itemsinfo> {
                     children: [
                       Icon(
                         Icons.fire_truck,
-                        size: 30,
+                        size: 26,
                         color: Color.fromARGB(150, 0, 0, 0),
                       ),
                       Text(
                         'COD Available',
                         style: TextStyle(
                           color: Color.fromARGB(150, 0, 0, 0),
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -197,13 +197,13 @@ class _ItemsinfoState extends State<Itemsinfo> {
                   Icon(
                     Icons.public,
                     color: Color.fromARGB(150, 0, 0, 0),
-                    size: 30,
+                    size: 26,
                   ),
                   Text(
                     'Worldwide Shipping',
                     style: TextStyle(
                       color: Color.fromARGB(150, 0, 0, 0),
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
